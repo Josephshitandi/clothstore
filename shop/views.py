@@ -50,6 +50,21 @@ class LogoutAPIView(generics.CreateAPIView):
             return Response(error_message,status=status.HTTP_400_BAD_REQUEST)
         return Response(success_message,status=status.HTTP_200_OK)
     
+class ProductViewSet(APIView):
+    def get(self, request, format=None):      
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request, format=None):
+        permission_classes = [IsAuthenticated,IsAdmin]
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
 class ProductDetail(APIView):
     """
     Retrieve, update or delete product instance.
