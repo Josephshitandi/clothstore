@@ -29,5 +29,9 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id','category','image','card']
 
+class Sub_CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sub_Category
+        fields = ['id','name','description','category','image2']
 
 
