@@ -26,3 +26,17 @@ class Product(models.Model):
 
     def delete_product(self):
         self.delete()
+
+class Category(models.Model):
+    category = models.CharField(max_length=100)
+    image = CloudinaryField('image')
+    card = CloudinaryField('card')
+
+    def __str__(self):
+        return self.category
+
+    def save_category(self):
+        self.save()
+
+    def delete_category(self):
+        self.delete()
