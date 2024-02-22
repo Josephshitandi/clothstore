@@ -49,3 +49,33 @@ class LogoutAPIView(generics.CreateAPIView):
         except TokenError as error:
             return Response(error_message,status=status.HTTP_400_BAD_REQUEST)
         return Response(success_message,status=status.HTTP_200_OK)
+    
+class ProductDetail(APIView):
+    """
+    Retrieve, update or delete product instance.
+    """
+    def get_object(self, pk):
+        try:
+            return Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        product = self.get_object(pk)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        permission_classes = [IsAuthenticated, IsAdmin]
+        product = self.get_object(pk)
+        serializer = ProductSerializer(product, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        permission_classes = [IsAuthenticated, IsAdmin]
+        product = self.get_object(pk)
+        ProductSerializer.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
