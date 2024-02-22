@@ -4,3 +4,4 @@ cloudinary
 djangorestframework
 markdown       # Markdown support for the browsable API.
 django-filter
+djangorestframework-simplejwt
