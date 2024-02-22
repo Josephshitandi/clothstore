@@ -112,3 +112,48 @@ class UserManager(BaseUserManager):
         print("password...", password)
         return self._create_user(email, password=password, **extra_fields)
     
+class User(AbstractBaseUser, PermissionsMixin):
+
+    CUSTOMER = 1
+    ADMIN = 2
+    ROLE_CHOICES = (
+        (CUSTOMER, 'customer'),
+        (ADMIN, 'admin'),
+    )
+
+    email = models.EmailField(_('email address'), unique=True)
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
+    is_active = models.BooleanField(_('active'), default=True)
+    is_staff = models.BooleanField(default=False)
+    user_type = models.IntegerField(choices=ROLE_CHOICES, null=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+
+    def get_full_name(self):
+        '''
+        Returns the first_name plus the last_name, with a space in between.
+        '''
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        '''
+        Returns the short name for the user.
+        '''
+        return self.first_name
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        '''
+        Sends an email to this User.
+        '''
+        send_mail(subject, message, from_email, [self.email], **kwargs)
+
