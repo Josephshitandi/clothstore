@@ -15,3 +15,12 @@ class IsAdmin(BasePermission):
              super().has_permission(request, view)
              and (admin)
             )
+    
+class IsCustomerOrAdmin(BasePermission): 
+    def has_permission(self, request, view):
+        customer = request.user.user_type ==1
+        admin = request.user.user_type ==2
+        return bool(
+             super().has_permission(request, view)
+             and (admin or customer)
+            )
