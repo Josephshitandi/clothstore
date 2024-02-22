@@ -21,7 +21,10 @@ class UserSignupSerializer(serializers.ModelSerializer):
         validated_data['password'] = make_password(validated_data.get('password'))
         return super(UserSignupSerializer, self).create(validated_data)
 
-
+class LogoutSerializer(serializers.Serializer):
+    refresh_token=serializers.CharField()
+    
+   
 
 
 
