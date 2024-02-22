@@ -57,3 +57,18 @@ class Sub_Category(models.Model):
     def delete_sub_category(self):
         self.delete()
 
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateTimeField(_('date of order'), auto_now_add=True)
+    product_id = models.ForeignKey(
+        "Product", on_delete=models.CASCADE, related_name='order')
+    delivered = models.BooleanField()
+
+    # def __str__(self):
+    #     return self.date
+
+    def save_order(self):
+        self.save()
+
+    def delete_order(self):
+        self.delete()
