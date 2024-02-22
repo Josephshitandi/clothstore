@@ -157,3 +157,19 @@ class User(AbstractBaseUser, PermissionsMixin):
         '''
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+class Profile(models.Model):
+    username = models.CharField(max_length=30)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='profile')
+    avatar = CloudinaryField('avatar', null=True, blank=True)
+    address = models.CharField(max_length=30)
+    phone_number = models.IntegerField()
+    region = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f'{self.user.last_name} Profile'
+
+    def save_profile(self):
+        self.save
+
+    def delete_profile(self):
+        self.delete()
