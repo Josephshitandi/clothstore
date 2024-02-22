@@ -94,3 +94,17 @@ class ProductDetail(APIView):
         product = self.get_object(pk)
         ProductSerializer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class CategorysViewSet(APIView):
+    def get(self, request, format=None):      
+        categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request, format=None):
+        permission_classes = [IsAuthenticated,IsAdmin]
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
