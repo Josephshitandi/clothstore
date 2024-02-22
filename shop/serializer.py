@@ -24,7 +24,10 @@ class UserSignupSerializer(serializers.ModelSerializer):
 class LogoutSerializer(serializers.Serializer):
     refresh_token=serializers.CharField()
     
-   
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id','category','image','card']
 
 
 
