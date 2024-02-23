@@ -160,3 +160,18 @@ class ProductSearchApiView(generics.ListAPIView):
     serializer_class=ProductSerializer
     filter_backends=[filters.SearchFilter]
     search_fields=['item_name']
+
+class ProfileList(APIView):
+    def get_profile(self, pk):
+        try:
+            return Profile.objects.get(pk=pk)
+        except Profile.DoesNotExist:
+            raise Http404
+
+    def patch(self, request, pk, format=None):
+        profile = self.get_profile(pk)
+        serializers = ProfileSerializer(profile, request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        
