@@ -154,4 +154,9 @@ class ProductCategory(ListAPIView):
         serializer = self.serializer_class(products, many=True,
                                                context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
-   
+    
+class ProductSearchApiView(generics.ListAPIView):
+    queryset=Product.objects.all()
+    serializer_class=ProductSerializer
+    filter_backends=[filters.SearchFilter]
+    search_fields=['item_name']
