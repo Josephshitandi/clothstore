@@ -112,3 +112,17 @@ class CategorysViewSet(APIView):
 class OrdersViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
+
+class ProductSubcategory(ListAPIView):
+    serializer_class = ProductSerializer
+    queryset= Product.objects.all()
+    
+    def get(self, request, category_id, *args, **kwargs): 
+        sub_category = get_object_or_404(Sub_Category, pk=category_id)
+        queryset = Product.objects.filter(sub_category=sub_category)
+        if not queryset:
+            message = {"error": "Product doesn’t exist"}
+            return Response(message, status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(queryset, many=True,
+                                               context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
