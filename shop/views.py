@@ -140,3 +140,18 @@ class SubcategoryCategory(ListAPIView):
         serializer = self.serializer_class(queryset, many=True,
                                                context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class ProductCategory(ListAPIView):
+    serializer_class = ProductSerializer
+    queryset= Product.objects.all()
+    def get(self, request, category_id, *args, **kwargs): 
+        category = get_object_or_404(Category, pk=category_id)
+        sub_category = Sub_Category.objects.filter(category=category)
+        products = []
+        for item in sub_category: 
+            product = list(Product.objects.filter(sub_category=item))
+            products.extend(product)
+        serializer = self.serializer_class(products, many=True,
+                                               context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+   
