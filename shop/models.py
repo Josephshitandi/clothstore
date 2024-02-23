@@ -7,8 +7,7 @@ from tinymce.models import HTMLField
 from django.core.mail import send_mail
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth.base_user import BaseUserManager
 
@@ -21,7 +20,6 @@ class Product(models.Model):
     image2 = CloudinaryField('image_2', blank=True, null=True)
     quantity = models.IntegerField(default=0)
     color = models.CharField(max_length=100, blank=True, null=True)
-    shipped_from = models.ForeignKey("Shop", on_delete=models.CASCADE, related_name='shop')
     size = models.CharField(max_length=100, blank=True)
     brand = models.CharField(max_length=100, blank=True)
     sub_category = models.ForeignKey(

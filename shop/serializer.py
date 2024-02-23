@@ -35,10 +35,9 @@ class Sub_CategorySerializer(serializers.ModelSerializer):
         fields = ['id','name','description','category','image2']
 
 class ProductSerializer(serializers.ModelSerializer):
-    shipped_from = serializers.CharField(source='shipped_from.store_name')
     class Meta:
         model = Product
-        fields = ['id','item_name','price','date_added','sub_category','quantity','color','previous_price','shipped_from','size','brand','image','image2']
+        fields = ['id','item_name','price','date_added','sub_category','quantity','color','previous_price','size','brand','image','image2']
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
